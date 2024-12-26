@@ -11,12 +11,15 @@
             --primary: #000000;
             --secondary: #FFFFFF;
             --accent: #db3409;
+            --time: 0.3s;
+            --style: ease;
         }
 
         html {
             scroll-behavior: smooth;
             color: var(--primary);
             background-color: var(--secondary);
+            transition: background-color var(--time) var(--style), color var(--time) var(--style);
         }
 
         body {
@@ -30,6 +33,7 @@
             background-color: var(--secondary);
             vertical-align: middle;
             font-family: 'Mulish', sans-serif;
+            transition: background-color var(--time) var(--style), color var(--time) var(--style);
         }
 
         header.sticky {
@@ -93,7 +97,7 @@
             padding: 0.5% 3% 0.5% 2%;
             border-radius: 15px;
             vertical-align: middle;
-            transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+            transition: background-color var(--time) var(--style), color var(--time) var(--style), border var(--time) var(--style);
             cursor: pointer;
             color: var(--primary);
             background-color: var(--secondary);
@@ -102,17 +106,20 @@
 
         label:hover {
             color: var(--secondary);
-            background-color: var(--accent);
+            background-color: var(--primary);
             border: 1px solid var(--primary);
         }
 
         footer {
             padding: 1rem;
-            color: var(--primary);
         }
 
         section {
             padding-bottom: 0rem;
+        }
+
+        h2 {
+            transition: background-color var(--time) var(--style), color var(--time) var(--style);
         }
 
         h2.sticky {
@@ -132,13 +139,12 @@
             outline: none;
             cursor: pointer;
             vertical-align: middle;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color var(--time) var(--style), border var(--time) var(--style);
         }
 
         input[type="checkbox"]:checked {
             background-color: var(--primary);
             border-color: var(--primary);
-            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         button {
@@ -156,7 +162,7 @@
             cursor: pointer;
             text-align: center;
             vertical-align: middle;
-            transition: background-color 0.3s ease, transform 0.2s ease, font-weight 0.3s ease;
+            transition: background-color var(--time) var(--style), border var(--time) var(--style), color var(--time) var(--style);
             /* Block text selection inside buttons. */
             user-select: none;
             -webkit-user-select: none;
@@ -165,14 +171,14 @@
 
         button:hover {
             color: var(--secondary);
-            background-color: var(--accent);
+            background-color: var(--primary);
             border: 1px solid var(--primary);
         }
 
     </style>
     <title>Red Dead Redemption 100% Checklist</title>
     <script>
-        let checkboxes = 219
+        let checkboxes = 244
 
         function marcarTudo(id_inicial,id_final,estado) {
             for (let index = id_inicial; index <= id_final; index++) {
@@ -184,39 +190,29 @@
 
         function checarPorcentagem() {
             let porcentagem = 0;
-            let progress_point = 0.53; // 100% divided by 187 objectives;
-            
-            let beginning = 0;
-            let exports = 0;
 
             for (let index = 1; index <= checkboxes; index++) {
-                let caixa = document.getElementById(index.toString());
+                let caixa = document.getElementById(index.toString()).checked;
 
-                if ((index >= 1) && (index <= 3)) {
-                    /* Import/Export counts only complete lists. */
-                    if (caixa.checked === true) {
-                        beginning += 1;
+                if (caixa === true) {
+                    if ((index === 129) || (index === 58)) {
+                            porcentagem += 0;                            // Solomon's Folly (Hideouts) and I Know You (Strangers) do not count.
+                    } else if ((index >= 151) && (index <= 244)) {
+                            porcentagem += 0.0638298;                    // Locations count 6/94 of a percent or 0.0638298%.
+                    } else if ((index >= 90) && (index <= 109)) {
+                            porcentagem += 0.1;                          // Bounties count 0.1%.
+                    } else if ((index >= 77) && (index <= 89)) {
+                            porcentagem += 0.1538462;                    // Safehouses count 2/13 of a percent, or 0.1538462%.
+                    } else if ((index >= 110) && (index <= 136)) {
+                            porcentagem += 0.5;                          // Weapons, Outfits, Jobs and Hideouts count 0.5%.
+                    } else if ((index >= 59) && (index <= 76)) {
+                            porcentagem += 0.5;                          // Strangers count 0.5%.
+                    } else if ((index >= 145) && (index <= 150)) {
+                            porcentagem += 0.5;                          // Minigames count 0.5%.
+                    } else {
+                        porcentagem += 1;                                // Main Story and Challenges count 1%.
                     }
-                } else if ((index >= 106) && (index <= 135)) {
-                    /* Import/Export counts only complete lists. */
-                    if (caixa.checked === true) {
-                        exports += 1;
-                    }
-                } else if (index === 37){
-                        /* King in Exile does not increase percentage. */
-                } else if (caixa.checked === true) {
-                    porcentagem += progress_point;
                 }
-            }
-            
-            if (beginning > 0) {
-                    let division = Math.floor(beginning / 3);
-                    porcentagem += (progress_point * division);
-            }
-
-            if (exports > 0) {
-                    let division = Math.floor(exports / 10);
-                    porcentagem += (progress_point * division);
             }
 
             let score = document.getElementById("percent");
@@ -369,8 +365,8 @@
         <div class="title">Red Dead Redemption 100% Checklist</div>
         <div class="percent" id="percent">Percentage completed: 0% </div>
         <div class="buttons">
-            <button onclick="marcarTudo(1,219,false)">0%</button>
-            <button onclick="marcarTudo(1,219,true)">100%</button>
+            <button onclick="marcarTudo(1,244,false)">0%</button>
+            <button onclick="marcarTudo(1,244,true)">100%</button>
             <button onclick="saveToCookie()" id="save_btn">Save</button>
             <button onclick="loadFromCookie()" id="load_btn">Load</button>
             <button onclick="deleteCookie()" id="delete_btn">Delete</button>
@@ -381,649 +377,609 @@
     <section>
         <h2 class="sticky">
             Main Story - New Austin Chapter
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(1,25,true)">All</button>
+            <button onclick="marcarTudo(1,25,false)">None</button>
         </h2>
         <div>
             <h3>John Marston</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(1,1,true)">All</button>
+                <button onclick="marcarTudo(1,1,false)">None</button>
             </p>
             <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Exodus in America<br></label>
         </div>
         <div>
             <h3>Bonnie MacFarlane</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(2,8,true)">All</button>
+                <button onclick="marcarTudo(2,8,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">New Friends, Old Problems<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Obstacles in Our Path<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">This is Armadillo, USA<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Women and Cattle<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Wild Horses, Tamed Passions<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">A Tempest Looms<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Burning<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="2" id="2"><label for="2">New Friends, Old Problems<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="3" id="3"><label for="3">Obstacles in Our Path<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="4" id="4"><label for="4">This is Armadillo, USA<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="5" id="5"><label for="5">Women and Cattle<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="6" id="6"><label for="6">Wild Horses, Tamed Passions<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="7" id="7"><label for="7">A Tempest Looms<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="8" id="8"><label for="8">The Burning<br></label>
         </div>
         <div>
             <h3>Leigh Johnson</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(9,13,true)">All</button>
+                <button onclick="marcarTudo(9,13,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Political Realities in Armadillo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Justice in Pike's Basin<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Spare the Rod, Spoil the Bandit<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Hanging Bonnie MacFarlane<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Assault on Fort Mercer<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="9" id="9"><label for="9">Political Realities in Armadillo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="10" id="10"><label for="10">Justice in Pike's Basin<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="11" id="11"><label for="11">Spare the Rod, Spoil the Bandit<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="12" id="12"><label for="12">Hanging Bonnie MacFarlane<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="13" id="13"><label for="13">The Assault on Fort Mercer<br></label>
         </div>
         <div>
             <h3>Nigel West Dickens</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(14,18,true)">All</button>
+                <button onclick="marcarTudo(14,18,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Old Swindler Blues<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">You Shall Not Give False Testimony, Except for Profit<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Liars, Cheats and Other Proud Americans<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Can a Swindler Change His Spots?<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Sport of Kings, and Liars<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="14" id="14"><label for="14">Old Swindler Blues<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="15" id="15"><label for="15">You Shall Not Give False Testimony, Except for Profit<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="16" id="16"><label for="16">Liars, Cheats and Other Proud Americans<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="17" id="17"><label for="17">Can a Swindler Change His Spots?<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="18" id="18"><label for="18">The Sport of Kings, and Liars<br></label>
         </div>
         <div>
             <h3>Seth Briars</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(19,21,true)">All</button>
+                <button onclick="marcarTudo(19,21,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Exhuming and Other Fine Hobbies<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">A Gentle Drive with Friends<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Let the Dead Bury Their Dead<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="19" id="19"><label for="19">Exhuming and Other Fine Hobbies<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="20" id="20"><label for="20">A Gentle Drive with Friends<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="21" id="21"><label for="21">Let the Dead Bury Their Dead<br></label>
         </div>
         <div>
             <h3>Irish</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(22,25,true)">All</button>
+                <button onclick="marcarTudo(22,25,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">A Frenchman, a Welshman and an Irishman<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Man is Born Unto Trouble<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">On Shaky's Ground<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">We Shall Be Together in Paradise<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="22" id="22"><label for="22">A Frenchman, a Welshman and an Irishman<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="23" id="23"><label for="23">Man is Born Unto Trouble<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="24" id="24"><label for="24">On Shaky's Ground<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="25" id="25"><label for="25">We Shall Be Together in Paradise<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
-            Main Story - Nuevo Paraiso Chapter
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            Main Story - Nuevo Paraíso Chapter
+            <button onclick="marcarTudo(26,41,true)">All</button>
+            <button onclick="marcarTudo(26,41,false)">None</button>
         </h2>
         <div>
             <h3>Vincente de Santa</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(26,30,true)">All</button>
+                <button onclick="marcarTudo(26,30,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Civilization, at Any Price<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Demon Drink<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Empty Promises<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mexican Caesar<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Cowards Die Many Times<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="26" id="26"><label for="26">Civilization, at Any Price<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="27" id="27"><label for="27">The Demon Drink<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="28" id="28"><label for="28">Empty Promises<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="29" id="29"><label for="29">Mexican Caesar<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="30" id="30"><label for="30">Cowards Die Many Times<br></label>
         </div>
         <div>
             <h3>Landon Ricketts</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(31,34,true)">All</button>
+                <button onclick="marcarTudo(31,34,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Gunslinger's Tragedy<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Landon Ricketts Rides Again<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Lucky in Love<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Mexican Wagon Train<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="31" id="31"><label for="31">The Gunslinger's Tragedy<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="32" id="32"><label for="32">Landon Ricketts Rides Again<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="33" id="33"><label for="33">Lucky in Love<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="34" id="34"><label for="34">The Mexican Wagon Train<br></label>
         </div>
         <div>
             <h3>Luisa Fortuna</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(35,38,true)">All</button>
+                <button onclick="marcarTudo(35,38,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">My Sister's Keeper<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Must a Savior Die?<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Father Abraham<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Captain De Santa's Downfall<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="35" id="35"><label for="35">My Sister's Keeper<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="36" id="36"><label for="36">Must a Savior Die?<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="37" id="37"><label for="37">Father Abraham<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="38" id="38"><label for="38">Captain De Santa's Downfall<br></label>
         </div>
         <div>
             <h3>Abraham Reyes</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(39,41,true)">All</button>
+                <button onclick="marcarTudo(39,41,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Great Mexican Train Robbery<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Gates of El Presidio<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">An Appointed Time<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="39" id="39"><label for="39">The Great Mexican Train Robbery<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="40" id="40"><label for="40">The Gates of El Presidio<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="41" id="41"><label for="41">An Appointed Time<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
             Main Story - West Elizabeth Chapter
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(42,48,true)">All</button>
+            <button onclick="marcarTudo(42,48,false)">None</button>
         </h2>
         <div>
             <h3>Edgar Ross</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(42,45,true)">All</button>
+                <button onclick="marcarTudo(42,45,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Bear One Another's Burdens<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Great Men are Not Always Wise<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">And You Will Know The Truth<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">And The Truth Will Set You Free<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="42" id="42"><label for="42">Bear One Another's Burdens<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="43" id="43"><label for="43">Great Men are Not Always Wise<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="44" id="44"><label for="44">And You Will Know The Truth<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="45" id="45"><label for="45">And The Truth Will Set You Free<br></label>
         </div>
         <div>
             <h3>Harold MacDougal</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(46,48,true)">All</button>
+                <button onclick="marcarTudo(46,48,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">At Home with Dutch<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">For Purely Scientific Purposes<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Prodigal Son Returns (To Yale)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="46" id="46"><label for="46">At Home with Dutch<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="47" id="47"><label for="47">For Purely Scientific Purposes<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="48" id="48"><label for="48">The Prodigal Son Returns (To Yale)<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
             Main Story - Marston Ranch Chapter
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(49,57,true)">All</button>
+            <button onclick="marcarTudo(49,57,false)">None</button>
         </h2>
         <div>
             <h3>Abigail Marston</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(49,51,true)">All</button>
+                <button onclick="marcarTudo(49,51,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Outlaw's Return<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Pestilence<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Old Friends, New Problems<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="49" id="49"><label for="49">The Outlaw's Return<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="50" id="50"><label for="50">Pestilence<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="51" id="51"><label for="51">Old Friends, New Problems<br></label>
         </div>
         <div>
             <h3>Uncle</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(52,53,true)">All</button>
+                <button onclick="marcarTudo(52,53,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">By Sweat and Toil<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">A Continual Feast<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="52" id="52"><label for="52">By Sweat and Toil<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="53" id="53"><label for="53">A Continual Feast<br></label>
         </div>
         <div>
             <h3>Jack Marston</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(54,57,true)">All</button>
+                <button onclick="marcarTudo(54,57,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">John Marston and Son<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Wolves, Dogs and Sons<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Spare the Love, Spoil the Child<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Last Enemy That Shall Be Destroyed<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="54" id="54"><label for="54">John Marston and Son<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="55" id="55"><label for="55">Wolves, Dogs and Sons<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="56" id="56"><label for="56">Spare the Love, Spoil the Child<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="57" id="57"><label for="57">The Last Enemy That Shall Be Destroyed<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
             Strangers
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(58,76,true)">All</button>
+            <button onclick="marcarTudo(58,76,false)">None</button>
         </h2>
         <div>
             <h3>New Austin</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(58,67,true)">All</button>
+                <button onclick="marcarTudo(58,67,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">I Know You (NÃO CONTA!!)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Jenny's Faith<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Funny Man<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">California<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">American Appetites<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Let No Man Put Asunder<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Lights, Camera, Action<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Water and Honesty<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Flowers for a Lady<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Who Are You to Judge<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="58" id="58"><label for="58">I Know You (NÃO CONTA!!)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="59" id="59"><label for="59">Jenny's Faith<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="60" id="60"><label for="60">Funny Man<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="61" id="61"><label for="61">California<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="62" id="62"><label for="62">American Appetites<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="63" id="63"><label for="63">Let No Man Put Asunder<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="64" id="64"><label for="64">Lights, Camera, Action<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="65" id="65"><label for="65">Water and Honesty<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="66" id="66"><label for="66">Flowers for a Lady<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="67" id="67"><label for="67">Who Are You to Judge<br></label>
         </div>
         <div>
             <h3>Nuevo Paraíso</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(68,72,true)">All</button>
+                <button onclick="marcarTudo(68,72,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Aztec Gold<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Deadalus and Son<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Eva in Peril<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Love is the Opiate<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Poppycock<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="68" id="68"><label for="68">Aztec Gold<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="69" id="69"><label for="69">Deadalus and Son<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="70" id="70"><label for="70">Eva in Peril<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="71" id="71"><label for="71">Love is the Opiate<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="72" id="72"><label for="72">Poppycock<br></label>
         </div>
         <div>
             <h3>West Elizabeth</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(73,76,true)">All</button>
+                <button onclick="marcarTudo(73,76,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">American Lobbyist<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Prohibitionist<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Wronged Woman<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Remember My Family<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="73" id="73"><label for="73">American Lobbyist<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="74" id="74"><label for="74">The Prohibitionist<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="75" id="75"><label for="75">The Wronged Woman<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="76" id="76"><label for="76">Remember My Family<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
             Safe Houses
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(77,89,true)">All</button>
+            <button onclick="marcarTudo(77,89,false)">None</button>
         </h2>
         <div>
             <h3>New Austin</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(77,80,true)">All</button>
+                <button onclick="marcarTudo(77,80,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">MacFarlane's Ranch<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Armadillo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rathskeller Fork<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Thieves' Landing<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="77" id="77"><label for="77">MacFarlane's Ranch<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="78" id="78"><label for="78">Armadillo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="79" id="79"><label for="79">Rathskeller Fork<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="80" id="80"><label for="80">Thieves' Landing<br></label>
         </div>
         <div>
             <h3>Nuevo Paraíso</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(81,85,true)">All</button>
+                <button onclick="marcarTudo(81,85,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Irish's Shack (Puerto Cuchillo)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Escalera<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Chuparosa<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Casa Madrugada<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">El Matadero<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="81" id="81"><label for="81">Irish's Shack (Puerto Cuchillo)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="82" id="82"><label for="82">Escalera<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="83" id="83"><label for="83">Chuparosa<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="84" id="84"><label for="84">Casa Madrugada<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="85" id="85"><label for="85">El Matadero<br></label>
         </div>
         <div>
             <h3>West Elizabeth</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(86,89,true)">All</button>
+                <button onclick="marcarTudo(86,89,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Blackwater<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Manzanita Post<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Beecher's Hope (John and Abigail)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Beecher's Hope Safehouse (Jack)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="86" id="86"><label for="86">Blackwater<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="87" id="87"><label for="87">Manzanita Post<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="88" id="88"><label for="88">Beecher's Hope (John and Abigail)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="89" id="89"><label for="89">Beecher's Hope Safehouse (Jack)<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
             Bounty Locations
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(90,109,true)">All</button>
+            <button onclick="marcarTudo(90,109,false)">None</button>
         </h2>
         <div>
             <h3>New Austin</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(90,97,true)">All</button>
+                <button onclick="marcarTudo(90,97,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">The Hanging Rock<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rattlesnake Hollow<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mercer Station<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rio del Lobo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Silent Stead<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Repentance Rock<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Brittlebrush Trawl<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mescalero<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="90" id="90"><label for="90">The Hanging Rock<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="91" id="91"><label for="91">Rattlesnake Hollow<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="92" id="92"><label for="92">Mercer Station<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="93" id="93"><label for="93">Rio del Lobo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="94" id="94"><label for="94">Silent Stead<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="95" id="95"><label for="95">Repentance Rock<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="96" id="96"><label for="96">Brittlebrush Trawl<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="97" id="97"><label for="97">Mescalero<br></label>
         </div>
         <div>
             <h3>Nuevo Paraíso</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(98,105,true)">All</button>
+                <button onclick="marcarTudo(98,105,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Plata Grande<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Sepulcro<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Barranca<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Ojo del Diablo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rancho Polvo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Primera Quebrada<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Laguna Borrego<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Hendidura Grande<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="98" id="98"><label for="98">Plata Grande<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="99" id="99"><label for="99">Sepulcro<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="100" id="100"><label for="100">Barranca<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="101" id="101"><label for="101">Ojo del Diablo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="102" id="102"><label for="102">Rancho Polvo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="103" id="103"><label for="103">Primera Quebrada<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="104" id="104"><label for="104">Laguna Borrego<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="105" id="105"><label for="105">Hendidura Grande<br></label>
         </div>
         <div>
             <h3>West Elizabeth</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(106,109,true)">All</button>
+                <button onclick="marcarTudo(106,109,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Aurora Basin<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Bearclaw Camp<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Nekoti Rock<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tanner's Reach<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="106" id="106"><label for="106">Aurora Basin<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="107" id="107"><label for="107">Bearclaw Camp<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="108" id="108"><label for="108">Nekoti Rock<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="109" id="109"><label for="109">Tanner's Reach<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
-            Other Crap
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            Side Missions
+            <button onclick="marcarTudo(110,150,true)">All</button>
+            <button onclick="marcarTudo(110,150,false)">None</button>
         </h2>
         <div>
             <h3>Rare Weapons</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(110,114,true)">All</button>
+                <button onclick="marcarTudo(110,114,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">LeMat Revolver (Escalera)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mauser Pistol (Blackwater)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Evans Repeater (Blackwater)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Semi-auto Shotgun (Escalera)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Carcano Rifle (Blackwater)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="110" id="110"><label for="110">LeMat Revolver (Escalera)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="111" id="111"><label for="111">Mauser Pistol (Blackwater)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="112" id="112"><label for="112">Evans Repeater (Blackwater)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="113" id="113"><label for="113">Semi-auto Shotgun (Escalera)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="114" id="114"><label for="114">Carcano Rifle (Blackwater)<br></label>
         </div>
         <div>
             <h3>Outfits</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(115,123,true)">All</button>
+                <button onclick="marcarTudo(115,123,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Elegant Suit<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rancher<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mexican Poncho<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Bollard Twins<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Treasure Hunter<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Bandito<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Reyes' Rebels<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">U.S. Army (Jack Marston)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">U.S. Marshal (Jack Marston)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="115" id="115"><label for="115">Elegant Suit<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="116" id="116"><label for="116">Rancher<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="117" id="117"><label for="117">Mexican Poncho<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="118" id="118"><label for="118">Bollard Twins<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="119" id="119"><label for="119">Treasure Hunter<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="120" id="120"><label for="120">Bandito<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="121" id="121"><label for="121">Reyes' Rebels<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="122" id="122"><label for="122">U.S. Army (Jack Marston)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="123" id="123"><label for="123">U.S. Marshal (Jack Marston)<br></label>
         </div>
         <div>
             <h3>Job Locations</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(124,128,true)">All</button>
+                <button onclick="marcarTudo(124,128,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Ridgewood Farm (Horsebreaking)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Chuparosa (Horsebreaking)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">MacFarlane's Ranch (Nightwatch)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Chuparosa (Nightwatch)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Blackwater (Nightwatch)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="124" id="124"><label for="124">Ridgewood Farm (Horsebreaking)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="125" id="125"><label for="125">Chuparosa (Horsebreaking)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="126" id="126"><label for="126">MacFarlane's Ranch (Nightwatch)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="127" id="127"><label for="127">Chuparosa (Nightwatch)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="128" id="128"><label for="128">Blackwater (Nightwatch)<br></label>
         </div>
         <div>
             <h3>Gang Hideouts</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(129,136,true)">All</button>
+                <button onclick="marcarTudo(129,136,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Solomon's Folly (NÃO CONTA!!)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Twin Rocks<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tumbleweed<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Pike's Basin<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Gaptooth Breach<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Fort Mercer<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tesoro Azul<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Nosalida<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="129" id="129"><label for="129">Solomon's Folly (NÃO CONTA!!)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="130" id="130"><label for="130">Twin Rocks<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="131" id="131"><label for="131">Tumbleweed<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="132" id="132"><label for="132">Pike's Basin<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="133" id="133"><label for="133">Gaptooth Breach<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="134" id="134"><label for="134">Fort Mercer<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="135" id="135"><label for="135">Tesoro Azul<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="136" id="136"><label for="136">Nosalida<br></label>
         </div>
         <div>
             <h3>Ambient Challenges</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(137,144,true)">All</button>
+                <button onclick="marcarTudo(137,144,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Sharpshooter (Rank 1 to 5)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Sharpshooter (Rank 6 to 10)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Survivalist (Rank 1 to 5)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Survivalist (Rank 6 to 10)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Master Hunter (Rank 1 to 5)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Master Hunter (Rank 6 to 10)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Treasure Hunter (Rank 1 to 5)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Treasure Hunter (Rank 6 to 10)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="137" id="137"><label for="137">Sharpshooter (Rank 1 to 5)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="138" id="138"><label for="138">Sharpshooter (Rank 6 to 10)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="139" id="139"><label for="139">Survivalist (Rank 1 to 5)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="140" id="140"><label for="140">Survivalist (Rank 6 to 10)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="141" id="141"><label for="141">Master Hunter (Rank 1 to 5)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="142" id="142"><label for="142">Master Hunter (Rank 6 to 10)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="143" id="143"><label for="143">Treasure Hunter (Rank 1 to 5)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="144" id="144"><label for="144">Treasure Hunter (Rank 6 to 10)<br></label>
         </div>
         <div>
             <h3>Mini Games</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(145,150,true)">All</button>
+                <button onclick="marcarTudo(145,150,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Five Finger Fillet (Reyes' Rebels)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Arm Wrestling (U.S. Army)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Blackjack (Treasure Hunter)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Liar's Dice (Bandito)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Poker (U.S. Army)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Horseshoes (Bollard Twins)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="145" id="145"><label for="145">Five Finger Fillet (Reyes' Rebels)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="146" id="146"><label for="146">Arm Wrestling (U.S. Army)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="147" id="147"><label for="147">Blackjack (Treasure Hunter)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="148" id="148"><label for="148">Liar's Dice (Bandito)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="149" id="149"><label for="149">Poker (U.S. Army)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="150" id="150"><label for="150">Horseshoes (Bollard Twins)<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
             Map Locations - New Austin
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(151,195,true)">All</button>
+            <button onclick="marcarTudo(151,195,false)">None</button>
         </h2>
         <div>
-            <h3>New Austin (1 to 7)</h3>
+            <h3>New Austin (1 to 9)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(151,159,true)">All</button>
+                <button onclick="marcarTudo(151,159,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Armadillo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Benedict Pass<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Benedict Point<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Brittlebrush Trawl<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Butter Bridge<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Cholla Springs<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Coot's Chapel<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="151" id="151"><label for="151">Armadillo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="152" id="152"><label for="152">Benedict Pass<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="153" id="153"><label for="153">Benedict Point<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="154" id="154"><label for="154">Brittlebrush Trawl<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="155" id="155"><label for="155">Cholla Springs<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="156" id="156"><label for="156">Coot's Chapel<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="157" id="157"><label for="157">Critchley's Ranch<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="158" id="158"><label for="158">Cueva Seca<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="159" id="159"><label for="159">Del Lobo Rock<br></label>
         </div>
         <div>
-            <h3>New Austin (8 to 14)</h3>
+            <h3>New Austin (10 to 18)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(160,168,true)">All</button>
+                <button onclick="marcarTudo(160,168,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Critchley's Ranch<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Cueva Seca<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Del Lobo Rock<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Dixon Crossing<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Fort Mercer<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Frontera Bridge<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Gaptooth Breach<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="160" id="160"><label for="160">Fort Mercer<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="161" id="161"><label for="161">Gaptooth Breach<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="162" id="162"><label for="162">Gaptooth Ridge<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="163" id="163"><label for="163">Greenhollow<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="164" id="164"><label for="164">Hamlin's Passing<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="165" id="165"><label for="165">Hanging Rock<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="166" id="166"><label for="166">Hennigan's Stead<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="167" id="167"><label for="167">Jorge's Gap<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="168" id="168"><label for="168">Lake Don Julio<br></label>
         </div>
         <div>
-            <h3>New Austin (15 to 21)</h3>
+            <h3>New Austin (19 to 27)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(169,177,true)">All</button>
+                <button onclick="marcarTudo(169,177,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Gaptooth Ridge<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Greenhollow<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Hamlin's Passing<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Hanging Rock<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Hennigan's Stead<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Jorge's Gap<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Lake Don Julio<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="169" id="169"><label for="169">MacFarlane's Ranch<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="170" id="170"><label for="170">Manteca Falls<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="171" id="171"><label for="171">Mason's Bridge<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="172" id="172"><label for="172">Mercer Station<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="173" id="173"><label for="173">Mescalero<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="174" id="174"><label for="174">Odd Fellow's Rest<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="175" id="175"><label for="175">Old Bacchus Place<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="176" id="176"><label for="176">Pike's Basin<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="177" id="177"><label for="177">Plainview<br></label>
         </div>
         <div>
-            <h3>New Austin (22 to 28)</h3>
+            <h3>New Austin (28 to 36)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(178,186,true)">All</button>
+                <button onclick="marcarTudo(178,186,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">MacFarlane's Ranch<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Manteca Falls<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mason's Bridge<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mercer Station<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mescalero<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Odd Fellow's Rest<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Old Bacchus Place<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="178" id="178"><label for="178">Pleasance House<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="179" id="179"><label for="179">Rathskeller Fork<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="180" id="180"><label for="180">Rattlesnake Hollow<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="181" id="181"><label for="181">Repentance Rock (Mystery Site)<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="182" id="182"><label for="182">Ridgewood Farm<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="183" id="183"><label for="183">Riley's Charge<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="184" id="184"><label for="184">Río Bravo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="185" id="185"><label for="185">Río del Lobo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="186" id="186"><label for="186">Scratching Post<br></label>
         </div>
         <div>
-            <h3>New Austin (29 to 35)</h3>
+            <h3>New Austin (37 to 45)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(187,195,true)">All</button>
+                <button onclick="marcarTudo(187,195,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Pike's Basin<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Plainview<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Pleasance House<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rathskeller Fork<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rattlesnake Hollow<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Repentance Rock (Mystery Site)<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Ridgewood Farm<br></label>
-        </div>
-        <div>
-            <h3>New Austin (36 to 42)</h3>
-            <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
-            </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Riley's Charge<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Río Bravo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Río del Lobo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Scratching Post<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Silent Stead<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Solomon's Folly<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Stillwater Creek<br></label>
-        </div>
-        <div>
-            <h3>New Austin (43 to 49)</h3>
-            <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
-            </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tanner's Span<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Thieves' Landing<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tumbleweed<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Twin Rocks<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Two Crows<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Venter's Place<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Warthington Ranch<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="187" id="187"><label for="187">Silent Stead<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="188" id="188"><label for="188">Solomon's Folly<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="189" id="189"><label for="189">Stillwater Creek<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="190" id="190"><label for="190">Thieves' Landing<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="191" id="191"><label for="191">Tumbleweed<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="192" id="192"><label for="192">Twin Rocks<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="193" id="193"><label for="193">Two Crows<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="194" id="194"><label for="194">Venter's Place<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="195" id="195"><label for="195">Warthington Ranch<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
             Map Locations - Nuevo Paraíso
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            <button onclick="marcarTudo(196,227,true)">All</button>
+            <button onclick="marcarTudo(196,227,false)">None</button>
         </h2>
         <div>
             <h3>Nuevo Paraíso (1 to 8)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(196,203,true)">All</button>
+                <button onclick="marcarTudo(196,203,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Agave Viejo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Alta Cabeza<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Barranca<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Campo Mirada<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Casa Madrugada<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Chuparosa<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Crooked Toes<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Diez Coronas<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="196" id="196"><label for="196">Agave Viejo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="197" id="197"><label for="197">Alta Cabeza<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="198" id="198"><label for="198">Barranca<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="199" id="199"><label for="199">Butter Bridge<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="200" id="200"><label for="200">Campo Mirada<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="201" id="201"><label for="201">Casa Madrugada<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="202" id="202"><label for="202">Chuparosa<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="203" id="203"><label for="203">Crooked Toes<br></label>
         </div>
         <div>
             <h3>Nuevo Paraíso (9 to 16)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(204,211,true)">All</button>
+                <button onclick="marcarTudo(204,211,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">El Matadero<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">El Presidio<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Escalera<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Hendidura Grande<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Laguna Borrego<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Las Hermanas<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mesa de la Luna<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mesa del Sol<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="204" id="204"><label for="204">Diez Coronas<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="205" id="205"><label for="205">El Matadero<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="206" id="206"><label for="206">El Presidio<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="207" id="207"><label for="207">Escalera<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="208" id="208"><label for="208">Hendidura Grande<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="209" id="209"><label for="209">Laguna Borrego<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="210" id="210"><label for="210">Las Hermanas<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="211" id="211"><label for="211">Mesa de la Luna<br></label>
         </div>
         <div>
             <h3>Nuevo Paraíso (17 to 24)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(212,219,true)">All</button>
+                <button onclick="marcarTudo(212,219,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Nosalida<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Ojo del Diablo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Perdido<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Plata Grande<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Primera Quebrada<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Puerto Cuchillo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Punta Orgullo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Ramita de la Baya<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="212" id="212"><label for="212">Mesa del Sol<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="213" id="213"><label for="213">Nosalida<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="214" id="214"><label for="214">Ojo del Diablo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="215" id="215"><label for="215">Perdido<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="216" id="216"><label for="216">Plata Grande<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="217" id="217"><label for="217">Primera Quebrada<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="218" id="218"><label for="218">Puerto Cuchillo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="219" id="219"><label for="219">Punta Orgullo<br></label>
         </div>
         <div>
-            <h3>Nuevo Paraíso (25 to 31)</h3>
+            <h3>Nuevo Paraíso (25 to 32)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(220,227,true)">All</button>
+                <button onclick="marcarTudo(220,227,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Rancho Polvo<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Río del Toro<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Roca de Madera<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Sepulcro<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Sidewinder Gulch<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tesoro Azul<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Torquemada<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="220" id="220"><label for="220">Ramita de la Baya<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="221" id="221"><label for="221">Rancho Polvo<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="222" id="222"><label for="222">Río del Toro<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="223" id="223"><label for="223">Roca de Madera<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="224" id="224"><label for="224">Sepulcro<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="225" id="225"><label for="225">Sidewinder Gulch<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="226" id="226"><label for="226">Tesoro Azul<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="227" id="227"><label for="227">Torquemada<br></label>
         </div>
     </section>
     <section>
         <h2 class="sticky">
-            Map Locations - West Elizabeth and Other Regions
-            <button onclick="marcarTudo(1,29,true)">All</button>
-            <button onclick="marcarTudo(1,29,false)">None</button>
+            Map Locations - West Elizabeth
+            <button onclick="marcarTudo(228,244,true)">All</button>
+            <button onclick="marcarTudo(228,244,false)">None</button>
         </h2>
         <div>
-            <h3>West Elizabeth (1 to 7)</h3>
+            <h3>West Elizabeth (1 to 9)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(228,236,true)">All</button>
+                <button onclick="marcarTudo(228,236,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Aurora Basin<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Bearclaw Camp<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Beecher's Hope<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Blackwater<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Broken Tree<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Cochinay<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Great Plains<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="228" id="228"><label for="228">Aurora Basin<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="229" id="229"><label for="229">Bearclaw Camp<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="230" id="230"><label for="230">Beecher's Hope<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="231" id="231"><label for="231">Blackwater<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="232" id="232"><label for="232">Broken Tree<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="233" id="233"><label for="233">Cochinay<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="234" id="234"><label for="234">Dixon Crossing<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="235" id="235"><label for="235">Great Plains<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="236" id="236"><label for="236">Manzanita Post<br></label>
         </div>
         <div>
-            <h3>West Elizabeth (8 to 14)</h3>
+            <h3>West Elizabeth (10 to 17)</h3>
             <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
+                <button onclick="marcarTudo(237,244,true)">All</button>
+                <button onclick="marcarTudo(237,244,false)">None</button>
             </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Manzanita Post<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Montana Ford<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Nekoti Rock<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Pacific Union Railroad Camp<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tall Trees<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tanner's Reach<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Wreck of the Serendipity<br></label>
-        </div>
-        <div>
-            <h3>Other Regions (1 to 6)</h3>
-            <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
-            </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Butter Bridge<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Dixon Crossing<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Flat Iron Lake<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Frontera Bridge<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Manteca Falls<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Mason's Bridge<br></label>
-        </div>
-        <div>
-            <h3>Other Regions (7 to 12)</h3>
-            <p>
-                <button onclick="marcarTudo(1,3,true)">All</button>
-                <button onclick="marcarTudo(1,3,false)">None</button>
-            </p>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Montana Ford<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Ramita de la Baya<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Redemption Mountains<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">San Luis River<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Sea of Coronado<br></label>
-            <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Tanner's Span<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="237" id="237"><label for="237">Marston Homestead<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="238" id="238"><label for="238">Montana Ford<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="239" id="239"><label for="239">Nekoti Rock<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="240" id="240"><label for="240">Pacific Union Railroad Camp<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="241" id="241"><label for="241">Tall Trees<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="242" id="242"><label for="242">Tanner's Reach<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="243" id="243"><label for="243">Tanner's Span<br></label>
+            <input type="checkbox" onclick="checarPorcentagem()" name="244" id="244"><label for="244">Wreck of the Serendipity<br></label>
         </div>
     </section>
     <footer>
