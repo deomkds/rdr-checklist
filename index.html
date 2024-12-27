@@ -5,14 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Mulish:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        @import url('https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap');
 
         :root {
-            --primary: #000000;
-            --secondary: #FFFFFF;
-            --accent: #db3409;
+            --primary: #990B0B;
+            --secondary: #F9F9F9;
+            --acc_lgt: #F7AC09;
+            --acc_drk: #DB6A00;
             --time: 0.3s;
             --style: ease;
+            --fnt: "Faculty Glyphic";
+            --wht: 600;
         }
 
         html {
@@ -23,7 +28,8 @@
         }
 
         body {
-            font-family: 'Mulish', sans-serif;
+            font-family: var(--fnt), sans-serif;
+            font-weight: var(--wht);
             margin: 0;
             padding: 0;
         }
@@ -32,7 +38,8 @@
             color: var(--primary);
             background-color: var(--secondary);
             vertical-align: middle;
-            font-family: 'Mulish', sans-serif;
+            font-family: var(--fnt), sans-serif;
+            font-weight: var(--wht);
             transition: background-color var(--time) var(--style), color var(--time) var(--style);
         }
 
@@ -49,8 +56,12 @@
 
         h3 {
             text-align: left;
-            margin: 0;
-            padding: 0.2rem;
+            margin: 0 0 0.4rem 0.1rem;
+            padding: 0.2rem 0.4rem;
+            background-color: var(--primary);
+            color: var(--secondary);
+            border: 2px solid var(--primary);
+            border-radius: 5px;
         }
 
         p {
@@ -94,20 +105,20 @@
         }
 
         label {
-            padding: 0.5% 3% 0.5% 2%;
-            border-radius: 15px;
+            padding: 0.3% 3% 0.3% 2%;
+            border-radius: 5px;
             vertical-align: middle;
             transition: background-color var(--time) var(--style), color var(--time) var(--style), border var(--time) var(--style);
             cursor: pointer;
             color: var(--primary);
             background-color: var(--secondary);
-            border: 1px solid var(--secondary);
+            border: 2px solid var(--secondary);
         }
 
         label:hover {
             color: var(--secondary);
-            background-color: var(--primary);
-            border: 1px solid var(--primary);
+            background-color: var(--acc_drk);
+            border: 2px solid var(--primary);
         }
 
         footer {
@@ -126,16 +137,17 @@
             z-index: 1;
             position: sticky;
             background-color: var(--secondary);
-            border-bottom: 1px solid;
-            top: 6rem;
+            border-bottom: 2px solid;
+            top: 6.46rem;
         }
 
         input[type="checkbox"] {
             appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 1px solid var(--primary);
+            width: 21px;
+            height: 21px;
+            border: 2px solid var(--primary);
             border-radius: 5px;
+            margin-left: 0.1rem;
             outline: none;
             cursor: pointer;
             vertical-align: middle;
@@ -150,15 +162,17 @@
         button {
             all: unset;
             display: inline-block;
-            padding: 3px 3px;
+            padding: 3px;
+            margin-bottom: 0.10rem;
             width: 4.3rem;
             font-weight: normal;
             color: var(--primary);
             background-color: var(--secondary);
-            border: 1px solid var(--primary);
+            border: 2px solid var(--primary);
             font-size: 12px;
-            font-family: 'Mulish', sans-serif;
-            border-radius: 100px;
+            font-family: var(--fnt), sans-serif;
+            font-weight: var(--wht);
+            border-radius: 5px;
             cursor: pointer;
             text-align: center;
             vertical-align: middle;
@@ -171,8 +185,18 @@
 
         button:hover {
             color: var(--secondary);
+            background-color: var(--acc_drk);
+            border: 2px solid var(--primary);
+        }
+
+        section h2 p {
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            color: var(--secondary);
             background-color: var(--primary);
-            border: 1px solid var(--primary);
+            text-align: center;
+            width: 28px;
+            height: 32px;
         }
 
     </style>
@@ -183,7 +207,7 @@
         function marcarTudo(id_inicial,id_final,estado) {
             for (let index = id_inicial; index <= id_final; index++) {
                 let caixa = document.getElementById(index.toString());
-                caixa.checked = estado;
+                    caixa.checked = estado;
             }
             checarPorcentagem();
         }
@@ -326,8 +350,14 @@
             const primary = getComputedStyle(root).getPropertyValue("--primary");
             const secondary = getComputedStyle(root).getPropertyValue("--secondary");
 
+            const accent_dark = getComputedStyle(root).getPropertyValue("--acc_drk");
+            const accent_lght = getComputedStyle(root).getPropertyValue("--acc_lgt");
+
             root.style.setProperty("--primary", secondary);
             root.style.setProperty("--secondary", primary);
+
+            root.style.setProperty("--acc_drk", accent_lght);
+            root.style.setProperty("--acc_lgt", accent_dark);
 
             const theme_button = document.getElementById("theme_btn");
 
@@ -376,12 +406,12 @@
     </header>
     <section>
         <h2 class="sticky">
-            Main Story - New Austin Chapter
+            <p>❇</p> Main Story - New Austin Chapter
             <button onclick="marcarTudo(1,25,true)">All</button>
             <button onclick="marcarTudo(1,25,false)">None</button>
         </h2>
         <div>
-            <h3>John Marston</h3>
+            <h3>❇ John Marston</h3>
             <p>
                 <button onclick="marcarTudo(1,1,true)">All</button>
                 <button onclick="marcarTudo(1,1,false)">None</button>
@@ -389,7 +419,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="1" id="1"><label for="1">Exodus in America<br></label>
         </div>
         <div>
-            <h3>Bonnie MacFarlane</h3>
+            <h3>❇ Bonnie MacFarlane</h3>
             <p>
                 <button onclick="marcarTudo(2,8,true)">All</button>
                 <button onclick="marcarTudo(2,8,false)">None</button>
@@ -403,7 +433,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="8" id="8"><label for="8">The Burning<br></label>
         </div>
         <div>
-            <h3>Leigh Johnson</h3>
+            <h3>❇ Leigh Johnson</h3>
             <p>
                 <button onclick="marcarTudo(9,13,true)">All</button>
                 <button onclick="marcarTudo(9,13,false)">None</button>
@@ -415,7 +445,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="13" id="13"><label for="13">The Assault on Fort Mercer<br></label>
         </div>
         <div>
-            <h3>Nigel West Dickens</h3>
+            <h3>❇ Nigel West Dickens</h3>
             <p>
                 <button onclick="marcarTudo(14,18,true)">All</button>
                 <button onclick="marcarTudo(14,18,false)">None</button>
@@ -427,7 +457,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="18" id="18"><label for="18">The Sport of Kings, and Liars<br></label>
         </div>
         <div>
-            <h3>Seth Briars</h3>
+            <h3>❇ Seth Briars</h3>
             <p>
                 <button onclick="marcarTudo(19,21,true)">All</button>
                 <button onclick="marcarTudo(19,21,false)">None</button>
@@ -437,7 +467,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="21" id="21"><label for="21">Let the Dead Bury Their Dead<br></label>
         </div>
         <div>
-            <h3>Irish</h3>
+            <h3>❇ Irish</h3>
             <p>
                 <button onclick="marcarTudo(22,25,true)">All</button>
                 <button onclick="marcarTudo(22,25,false)">None</button>
@@ -450,12 +480,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Main Story - Nuevo Paraíso Chapter
+            <p>❇</p> Main Story - Nuevo Paraíso Chapter
             <button onclick="marcarTudo(26,41,true)">All</button>
             <button onclick="marcarTudo(26,41,false)">None</button>
         </h2>
         <div>
-            <h3>Vincente de Santa</h3>
+            <h3>❇ Vincente de Santa</h3>
             <p>
                 <button onclick="marcarTudo(26,30,true)">All</button>
                 <button onclick="marcarTudo(26,30,false)">None</button>
@@ -467,7 +497,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="30" id="30"><label for="30">Cowards Die Many Times<br></label>
         </div>
         <div>
-            <h3>Landon Ricketts</h3>
+            <h3>❇ Landon Ricketts</h3>
             <p>
                 <button onclick="marcarTudo(31,34,true)">All</button>
                 <button onclick="marcarTudo(31,34,false)">None</button>
@@ -478,7 +508,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="34" id="34"><label for="34">The Mexican Wagon Train<br></label>
         </div>
         <div>
-            <h3>Luisa Fortuna</h3>
+            <h3>❇ Luisa Fortuna</h3>
             <p>
                 <button onclick="marcarTudo(35,38,true)">All</button>
                 <button onclick="marcarTudo(35,38,false)">None</button>
@@ -489,7 +519,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="38" id="38"><label for="38">Captain De Santa's Downfall<br></label>
         </div>
         <div>
-            <h3>Abraham Reyes</h3>
+            <h3>❇ Abraham Reyes</h3>
             <p>
                 <button onclick="marcarTudo(39,41,true)">All</button>
                 <button onclick="marcarTudo(39,41,false)">None</button>
@@ -501,12 +531,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Main Story - West Elizabeth Chapter
+            <p>❇</p> Main Story - West Elizabeth Chapter
             <button onclick="marcarTudo(42,48,true)">All</button>
             <button onclick="marcarTudo(42,48,false)">None</button>
         </h2>
         <div>
-            <h3>Edgar Ross</h3>
+            <h3>❇ Edgar Ross</h3>
             <p>
                 <button onclick="marcarTudo(42,45,true)">All</button>
                 <button onclick="marcarTudo(42,45,false)">None</button>
@@ -517,7 +547,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="45" id="45"><label for="45">And The Truth Will Set You Free<br></label>
         </div>
         <div>
-            <h3>Harold MacDougal</h3>
+            <h3>❇ Harold MacDougal</h3>
             <p>
                 <button onclick="marcarTudo(46,48,true)">All</button>
                 <button onclick="marcarTudo(46,48,false)">None</button>
@@ -529,12 +559,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Main Story - Marston Ranch Chapter
+            <p>❇</p> Main Story - Marston Ranch Chapter
             <button onclick="marcarTudo(49,57,true)">All</button>
             <button onclick="marcarTudo(49,57,false)">None</button>
         </h2>
         <div>
-            <h3>Abigail Marston</h3>
+            <h3>❇ Abigail Marston</h3>
             <p>
                 <button onclick="marcarTudo(49,51,true)">All</button>
                 <button onclick="marcarTudo(49,51,false)">None</button>
@@ -544,7 +574,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="51" id="51"><label for="51">Old Friends, New Problems<br></label>
         </div>
         <div>
-            <h3>Uncle</h3>
+            <h3>❇ Uncle</h3>
             <p>
                 <button onclick="marcarTudo(52,53,true)">All</button>
                 <button onclick="marcarTudo(52,53,false)">None</button>
@@ -553,7 +583,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="53" id="53"><label for="53">A Continual Feast<br></label>
         </div>
         <div>
-            <h3>Jack Marston</h3>
+            <h3>❇ Jack Marston</h3>
             <p>
                 <button onclick="marcarTudo(54,57,true)">All</button>
                 <button onclick="marcarTudo(54,57,false)">None</button>
@@ -566,12 +596,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Strangers
+            <p>✢</p> Strangers
             <button onclick="marcarTudo(58,76,true)">All</button>
             <button onclick="marcarTudo(58,76,false)">None</button>
         </h2>
         <div>
-            <h3>New Austin</h3>
+            <h3>✢ New Austin</h3>
             <p>
                 <button onclick="marcarTudo(58,67,true)">All</button>
                 <button onclick="marcarTudo(58,67,false)">None</button>
@@ -588,7 +618,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="67" id="67"><label for="67">Who Are You to Judge<br></label>
         </div>
         <div>
-            <h3>Nuevo Paraíso</h3>
+            <h3>✢ Nuevo Paraíso</h3>
             <p>
                 <button onclick="marcarTudo(68,72,true)">All</button>
                 <button onclick="marcarTudo(68,72,false)">None</button>
@@ -600,7 +630,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="72" id="72"><label for="72">Poppycock<br></label>
         </div>
         <div>
-            <h3>West Elizabeth</h3>
+            <h3>✢ West Elizabeth</h3>
             <p>
                 <button onclick="marcarTudo(73,76,true)">All</button>
                 <button onclick="marcarTudo(73,76,false)">None</button>
@@ -613,12 +643,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Safe Houses
+            <p>✦</p> Safe Houses
             <button onclick="marcarTudo(77,89,true)">All</button>
             <button onclick="marcarTudo(77,89,false)">None</button>
         </h2>
         <div>
-            <h3>New Austin</h3>
+            <h3>✦ New Austin</h3>
             <p>
                 <button onclick="marcarTudo(77,80,true)">All</button>
                 <button onclick="marcarTudo(77,80,false)">None</button>
@@ -629,7 +659,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="80" id="80"><label for="80">Thieves' Landing<br></label>
         </div>
         <div>
-            <h3>Nuevo Paraíso</h3>
+            <h3>✦ Nuevo Paraíso</h3>
             <p>
                 <button onclick="marcarTudo(81,85,true)">All</button>
                 <button onclick="marcarTudo(81,85,false)">None</button>
@@ -641,7 +671,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="85" id="85"><label for="85">El Matadero<br></label>
         </div>
         <div>
-            <h3>West Elizabeth</h3>
+            <h3>✦ West Elizabeth</h3>
             <p>
                 <button onclick="marcarTudo(86,89,true)">All</button>
                 <button onclick="marcarTudo(86,89,false)">None</button>
@@ -654,12 +684,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Bounty Locations
+            <p>✥</p> Bounty Locations
             <button onclick="marcarTudo(90,109,true)">All</button>
             <button onclick="marcarTudo(90,109,false)">None</button>
         </h2>
         <div>
-            <h3>New Austin</h3>
+            <h3>✥ New Austin</h3>
             <p>
                 <button onclick="marcarTudo(90,97,true)">All</button>
                 <button onclick="marcarTudo(90,97,false)">None</button>
@@ -674,7 +704,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="97" id="97"><label for="97">Mescalero<br></label>
         </div>
         <div>
-            <h3>Nuevo Paraíso</h3>
+            <h3>✥ Nuevo Paraíso</h3>
             <p>
                 <button onclick="marcarTudo(98,105,true)">All</button>
                 <button onclick="marcarTudo(98,105,false)">None</button>
@@ -689,7 +719,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="105" id="105"><label for="105">Hendidura Grande<br></label>
         </div>
         <div>
-            <h3>West Elizabeth</h3>
+            <h3>✥ West Elizabeth</h3>
             <p>
                 <button onclick="marcarTudo(106,109,true)">All</button>
                 <button onclick="marcarTudo(106,109,false)">None</button>
@@ -702,12 +732,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Side Missions
+            <p>✲</p> Side Missions
             <button onclick="marcarTudo(110,150,true)">All</button>
             <button onclick="marcarTudo(110,150,false)">None</button>
         </h2>
         <div>
-            <h3>Rare Weapons</h3>
+            <h3>✲ Rare Weapons</h3>
             <p>
                 <button onclick="marcarTudo(110,114,true)">All</button>
                 <button onclick="marcarTudo(110,114,false)">None</button>
@@ -719,7 +749,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="114" id="114"><label for="114">Carcano Rifle (Blackwater)<br></label>
         </div>
         <div>
-            <h3>Outfits</h3>
+            <h3>✲ Outfits</h3>
             <p>
                 <button onclick="marcarTudo(115,123,true)">All</button>
                 <button onclick="marcarTudo(115,123,false)">None</button>
@@ -735,7 +765,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="123" id="123"><label for="123">U.S. Marshal (Jack Marston)<br></label>
         </div>
         <div>
-            <h3>Job Locations</h3>
+            <h3>✲ Job Locations</h3>
             <p>
                 <button onclick="marcarTudo(124,128,true)">All</button>
                 <button onclick="marcarTudo(124,128,false)">None</button>
@@ -747,7 +777,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="128" id="128"><label for="128">Blackwater (Nightwatch)<br></label>
         </div>
         <div>
-            <h3>Gang Hideouts</h3>
+            <h3>✲ Gang Hideouts</h3>
             <p>
                 <button onclick="marcarTudo(129,136,true)">All</button>
                 <button onclick="marcarTudo(129,136,false)">None</button>
@@ -762,7 +792,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="136" id="136"><label for="136">Nosalida<br></label>
         </div>
         <div>
-            <h3>Ambient Challenges</h3>
+            <h3>✲ Ambient Challenges</h3>
             <p>
                 <button onclick="marcarTudo(137,144,true)">All</button>
                 <button onclick="marcarTudo(137,144,false)">None</button>
@@ -777,7 +807,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="144" id="144"><label for="144">Treasure Hunter (Rank 6 to 10)<br></label>
         </div>
         <div>
-            <h3>Mini Games</h3>
+            <h3>✲ Mini Games</h3>
             <p>
                 <button onclick="marcarTudo(145,150,true)">All</button>
                 <button onclick="marcarTudo(145,150,false)">None</button>
@@ -792,12 +822,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Map Locations - New Austin
+            <p>✬</p> Map Locations - New Austin
             <button onclick="marcarTudo(151,195,true)">All</button>
             <button onclick="marcarTudo(151,195,false)">None</button>
         </h2>
         <div>
-            <h3>New Austin (1 to 9)</h3>
+            <h3>✬ New Austin (1 to 9)</h3>
             <p>
                 <button onclick="marcarTudo(151,159,true)">All</button>
                 <button onclick="marcarTudo(151,159,false)">None</button>
@@ -813,7 +843,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="159" id="159"><label for="159">Del Lobo Rock<br></label>
         </div>
         <div>
-            <h3>New Austin (10 to 18)</h3>
+            <h3>✬ New Austin (10 to 18)</h3>
             <p>
                 <button onclick="marcarTudo(160,168,true)">All</button>
                 <button onclick="marcarTudo(160,168,false)">None</button>
@@ -829,7 +859,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="168" id="168"><label for="168">Lake Don Julio<br></label>
         </div>
         <div>
-            <h3>New Austin (19 to 27)</h3>
+            <h3>✬ New Austin (19 to 27)</h3>
             <p>
                 <button onclick="marcarTudo(169,177,true)">All</button>
                 <button onclick="marcarTudo(169,177,false)">None</button>
@@ -845,7 +875,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="177" id="177"><label for="177">Plainview<br></label>
         </div>
         <div>
-            <h3>New Austin (28 to 36)</h3>
+            <h3>✬ New Austin (28 to 36)</h3>
             <p>
                 <button onclick="marcarTudo(178,186,true)">All</button>
                 <button onclick="marcarTudo(178,186,false)">None</button>
@@ -861,7 +891,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="186" id="186"><label for="186">Scratching Post<br></label>
         </div>
         <div>
-            <h3>New Austin (37 to 45)</h3>
+            <h3>✬ New Austin (37 to 45)</h3>
             <p>
                 <button onclick="marcarTudo(187,195,true)">All</button>
                 <button onclick="marcarTudo(187,195,false)">None</button>
@@ -879,12 +909,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Map Locations - Nuevo Paraíso
+            <p>✬</p> Map Locations - Nuevo Paraíso
             <button onclick="marcarTudo(196,227,true)">All</button>
             <button onclick="marcarTudo(196,227,false)">None</button>
         </h2>
         <div>
-            <h3>Nuevo Paraíso (1 to 8)</h3>
+            <h3>✬ Nuevo Paraíso (1 to 8)</h3>
             <p>
                 <button onclick="marcarTudo(196,203,true)">All</button>
                 <button onclick="marcarTudo(196,203,false)">None</button>
@@ -899,7 +929,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="203" id="203"><label for="203">Crooked Toes<br></label>
         </div>
         <div>
-            <h3>Nuevo Paraíso (9 to 16)</h3>
+            <h3>✬ Nuevo Paraíso (9 to 16)</h3>
             <p>
                 <button onclick="marcarTudo(204,211,true)">All</button>
                 <button onclick="marcarTudo(204,211,false)">None</button>
@@ -914,7 +944,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="211" id="211"><label for="211">Mesa de la Luna<br></label>
         </div>
         <div>
-            <h3>Nuevo Paraíso (17 to 24)</h3>
+            <h3>✬ Nuevo Paraíso (17 to 24)</h3>
             <p>
                 <button onclick="marcarTudo(212,219,true)">All</button>
                 <button onclick="marcarTudo(212,219,false)">None</button>
@@ -929,7 +959,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="219" id="219"><label for="219">Punta Orgullo<br></label>
         </div>
         <div>
-            <h3>Nuevo Paraíso (25 to 32)</h3>
+            <h3>✬ Nuevo Paraíso (25 to 32)</h3>
             <p>
                 <button onclick="marcarTudo(220,227,true)">All</button>
                 <button onclick="marcarTudo(220,227,false)">None</button>
@@ -946,12 +976,12 @@
     </section>
     <section>
         <h2 class="sticky">
-            Map Locations - West Elizabeth
+            <p>✬</p> Map Locations - West Elizabeth
             <button onclick="marcarTudo(228,244,true)">All</button>
             <button onclick="marcarTudo(228,244,false)">None</button>
         </h2>
         <div>
-            <h3>West Elizabeth (1 to 9)</h3>
+            <h3>✬ West Elizabeth (1 to 9)</h3>
             <p>
                 <button onclick="marcarTudo(228,236,true)">All</button>
                 <button onclick="marcarTudo(228,236,false)">None</button>
@@ -967,7 +997,7 @@
             <input type="checkbox" onclick="checarPorcentagem()" name="236" id="236"><label for="236">Manzanita Post<br></label>
         </div>
         <div>
-            <h3>West Elizabeth (10 to 17)</h3>
+            <h3>✬ West Elizabeth (10 to 17)</h3>
             <p>
                 <button onclick="marcarTudo(237,244,true)">All</button>
                 <button onclick="marcarTudo(237,244,false)">None</button>
